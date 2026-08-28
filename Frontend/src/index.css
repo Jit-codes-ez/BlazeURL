@@ -1,1 +1,241 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap');
 @import "tailwindcss";
+
+:root,
+html[data-theme='light'] {
+  --bg-page: #f7f7f9;
+  --bg-base: #f7f7f9;
+  --bg-header: rgba(255, 253, 253, 0);
+  --bg-header-mobile: rgba(255, 255, 255, 0.94);
+  --shadow-header: 0 1px 0 rgba(15, 15, 25, 0.06);
+  --gradient-mid: #d97706;
+  --gradient-end: #be123c;
+
+  --text-primary: #14141f;
+  --text-secondary: #55556b;
+  --text-muted: #94a3b8;
+  --border-subtle: rgba(15, 15, 25, 0.08);
+  --border-glow: rgba(234, 88, 12, 0.3);
+
+  /* brand — matched to logo flame gradient */
+  --accent: #ea580c;         /* orange-600, close to logo's "blaze" text */
+  --accent-soft: rgba(234, 88, 12, 0.12);
+  --accent-contrast: #3f3f46; /* slate-700, matches the logo's "URL" charcoal */
+  --accent-glow: rgba(234, 88, 12, 0.25);
+
+  /* button/surface tokens now aliased to the orange brand */
+  --cta-primary: var(--accent);
+  --cta-primary-hover: #c2410c; /* orange-700 */
+  --cta-glow: var(--accent-glow);
+  --bg-surface: rgba(255, 255, 255, 0.65);
+  --bg-surface-hover: rgba(255, 255, 255, 0.85);
+}
+
+html[data-theme='dark'] {
+  --bg-page: #0a0908;
+  --bg-base: #0a0908;
+  --bg-header: rgba(15, 10, 8, 0.6);
+  --bg-header-mobile: rgba(15, 10, 8, 0.92);
+  --shadow-header: none;
+  --gradient-mid: #fbbf24;
+  --gradient-end: #fb7185;
+
+  --text-primary: #f5f2ef;
+  --text-secondary: #b0a89f;
+  --text-muted: #6b6259;
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-glow: rgba(249, 115, 22, 0.4);
+
+  --accent: #f97316;         /* orange-500, brighter for dark bg */
+  --accent-soft: rgba(249, 115, 22, 0.18);
+  --accent-contrast: #e4e0db; /* light warm grey, mirrors logo's URL on dark */
+  --accent-glow: rgba(249, 115, 22, 0.35);
+
+  --cta-primary: var(--accent);
+  --cta-primary-hover: #ea580c; /* orange-600 */
+  --cta-glow: var(--accent-glow);
+  --bg-surface: rgba(15, 15, 30, 0.55);
+  --bg-surface-hover: rgba(25, 25, 50, 0.7);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--bg-base);
+  transition: background-color 300ms ease, color 300ms ease;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background: var(--bg-base);
+  color: var(--text-primary);
+  font-family: 'Inter', sans-serif;
+  transition: background-color 300ms ease, color 300ms ease;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+::selection {
+  background: var(--accent-soft);
+  color: var(--text-primary);
+}
+
+.font-display {
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.font-mono {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.aurora-page {
+  position: relative;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background: var(--bg-base);
+}
+
+.glass-card {
+  background: var(--bg-surface);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid var(--border-subtle);
+  border-radius: 16px;
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  transition:
+    background-color 200ms ease,
+    border-color 200ms ease,
+    box-shadow 200ms ease,
+    transform 200ms ease;
+}
+
+.glass-card:hover {
+  background: var(--bg-surface-hover);
+  border-color: var(--border-glow);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    0 0 0 1px var(--accent-soft);
+  transform: translateY(-2px);
+}
+
+.primary-button {
+  background: var(--cta-primary);
+  border-radius: 10px;
+  padding: 12px 28px;
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  box-shadow: 0 0 20px var(--cta-glow);
+  transition: all 150ms ease;
+}
+
+.primary-button:hover {
+  background: var(--cta-primary-hover);
+  box-shadow: 0 0 32px var(--cta-glow);
+  transform: translateY(-1px);
+}
+
+.primary-button:active {
+  transform: translateY(0);
+  box-shadow: 0 0 12px var(--cta-glow);
+}
+
+.primary-button:focus-visible,
+.icon-button:focus-visible,
+.theme-toggle:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--border-glow);
+  outline-offset: 3px;
+}
+
+.url-input {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-subtle);
+  border-radius: 14px;
+  padding: 16px 20px;
+  color: var(--text-primary);
+  font-size: 16px;
+  outline: none;
+  transition: all 200ms ease;
+}
+
+html[data-theme='light'] .url-input {
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.url-input::placeholder {
+  color: var(--text-muted);
+}
+
+.url-input:focus {
+  border-color: var(--border-glow);
+  box-shadow:
+    0 0 0 3px var(--accent-soft),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+html[data-theme='light'] .url-input:focus {
+  background: rgba(255, 255, 255, 0.95);
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  25% {
+    transform: translateX(-3px);
+  }
+
+  75% {
+    transform: translateX(3px);
+  }
+}
+
+.animate-fade-up {
+  animation: fadeUp 300ms ease-out;
+}
+
+.animate-shake {
+  animation: shake 250ms ease-in-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
