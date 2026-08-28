@@ -23,12 +23,12 @@ function Navbar() {
               Features
             </a>
 
-            <a href="" className={navLinkClass}>
+            <a href="#" className={navLinkClass}>
               Login
             </a>
 
             
-            <a  href=""
+            <a  href="#"
               className="rounded-[10px] bg-(--accent) px-5 py-2.5 text-sm font-semibold text-white shadow-[0_0_20px_var(--accent-glow)] transition-colors hover:brightness-110"
             >
               Get Started
@@ -60,16 +60,12 @@ function Navbar() {
               Features
             </a>
 
-            <a href="/dashboard" onClick={closeMenu} className="rounded-xl px-4 py-3 text-(--text-secondary) transition-colors hover:bg-(--text-primary)/5 hover:text-(--text-primary)">
-              Dashboard
-            </a>
-
-            <a href="/login" onClick={closeMenu} className="rounded-xl px-4 py-3 text-(--text-secondary) transition-colors hover:bg-(--text-primary)/5 hover:text-(--text-primary)">
+            <a href="#" onClick={closeMenu} className="rounded-xl px-4 py-3 text-(--text-secondary) transition-colors hover:bg-(--text-primary)/5 hover:text-(--text-primary)">
               Login
             </a>
 
             
-            <a  href="/register"
+            <a  href="#"
               onClick={closeMenu}
               className="mt-2 rounded-xl bg-(--accent) px-4 py-3 text-center font-semibold text-white"
             >
