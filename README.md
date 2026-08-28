@@ -1,5 +1,5 @@
 <p align="center">
-  <!-- <img src="src/assets/BlazeURLLogo.png" alt="BlazeURL Logo" width="500"> -->
+  <img src="public/assets/logo.png" alt="BlazeURL Logo" width="500">
 </p>
 
 <div align="center">
