@@ -28,7 +28,7 @@ function BackgroundLayout({ children }) {
           speed={0.7}
           direction="forward"
           scale={2.3}
-          opacity={theme === 'dark' ? 0.65 : 0.35}
+          opacity={theme === 'dark' ? 0.65 : 0.45}
           mouseInteractive={true}
           renderScale={0.55}
           maxDpr={1.5}

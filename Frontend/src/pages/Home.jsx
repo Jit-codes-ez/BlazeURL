@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import {
   BarChart3,
   Gauge,
@@ -7,6 +8,7 @@ import {
   Zap,
 } from 'lucide-react'
 import GlassCard from '../components/GlassCard'
+import UrlShortener from '../components/UrlShortener'
 
 const features = [
   {
@@ -87,7 +89,7 @@ function Home() {
               </div>
 
               <div className="mx-auto mt-10 max-w-3xl animate-fade-up">
-                {/* URL Shortener will go here */}
+                <UrlShortener />
               </div>
 
               <div className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-xs text-(--text-secondary)">
@@ -157,12 +159,9 @@ function Home() {
                 unlock the full BlazeURL experience.
               </p>
 
-              
-              <a  href="#"
-                className="primary-button mt-7 inline-flex"
-              >
+              <Link to="/register" className="primary-button mt-7 inline-flex">
                 Create Free Account
-              </a>
+              </Link>
             </GlassCard>
           </section>
         </main>
