@@ -7,6 +7,7 @@ import {
   ShieldCheck,
   Zap,
 } from 'lucide-react'
+import WelcomeLayout from '../components/WelcomeLayout'
 import GlassCard from '../components/GlassCard'
 import UrlShortener from '../components/UrlShortener'
 
@@ -58,6 +59,7 @@ const features = [
 function Home() {
   return (
     <div className="relative min-h-screen overflow-hidden">
+      <WelcomeLayout />
       <div className="relative z-10">
 
         <main>

@@ -1,4 +1,5 @@
 import { Shield } from 'lucide-react'
+import GlassCard from '../components/GlassCard'
 
 const sections = [
   {
@@ -24,7 +25,7 @@ const sections = [
   {
     title: 'Third-Party Services',
     content:
-      'We use Supabase for database hosting. Your data is stored securely on their infrastructure. Please refer to Supabase\'s privacy policy for details on how they handle data.',
+      "We use Supabase for database hosting. Your data is stored securely on their infrastructure. Please refer to Supabase's privacy policy for details on how they handle data.",
   },
   {
     title: 'Security',
@@ -37,37 +38,57 @@ const sections = [
       'We may update this policy from time to time. Continued use of BlazeURL after changes are posted constitutes acceptance of the updated policy.',
   },
   {
-    title: 'Contact',
-    content:
-      'If you have any questions about this Privacy Policy, please reach out to us at support@blazeurl.com.',
-  },
+  title: 'Contact',
+  content: (
+    <>
+      For questions about these Privacy Policy, please mail the developer at{' '}
+      <a href="mailto:jithazra00@gmail.com" className="text-(--accent) hover:underline">
+        jithazra00@gmail.com
+      </a>.
+    </>
+  ),
+},
 ]
 
 function PrivacyPolicy() {
   return (
-    <div className="mx-auto max-w-2xl px-4 py-16">
+    <div className="mx-auto max-w-7xl px-4 py-16 pt-28">
+
       {/* Header */}
       <div
-        className="mb-10 flex flex-col items-center text-center"
+        className="mb-12 flex flex-col items-center text-center"
         style={{ animation: 'popUp 0.45s cubic-bezier(0.34,1.56,0.64,1) both' }}
       >
-        <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-(--border-subtle) bg-(--bg-header)">
-          <Shield size={24} className="text-(--accent)" />
+        <GlassCard className="mb-5 flex h-16 w-16 items-center justify-center rounded-2xl border border-(--accent)/30 bg-(--accent)/10">
+          <Shield size={30} className="text-(--accent)" />
+        </GlassCard>
+        <h1 className="text-4xl font-bold text-(--text-primary)">Privacy Policy</h1>
+        <p className="mt-3 max-w-md text-sm text-(--text-secondary)">
+          We care about your privacy. Here's exactly what we collect, how we use it, and how we protect it.
+        </p>
+        <div className="mt-4 rounded-full border border-(--border-subtle) bg-(--bg-header) px-4 py-1.5 text-xs text-(--text-secondary)">
+          Last updated: September 2026
         </div>
-        <h1 className="text-3xl font-bold text-(--text-primary)">Privacy Policy</h1>
-        <p className="mt-2 text-sm text-(--text-secondary)">Last updated: September 2026</p>
       </div>
 
       {/* Sections */}
-      <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-4">
         {sections.map((s, i) => (
-          <div
+          <GlassCard
             key={s.title}
-            style={{ animation: `popUp 0.45s cubic-bezier(0.34,1.56,0.64,1) ${0.05 * i}s both` }}
+            className="p-6"
+            style={{ animation: `popUp 0.45s cubic-bezier(0.34,1.56,0.64,1) ${0.04 * i}s both` }}
           >
-            <h2 className="mb-2 text-base font-semibold text-(--text-primary)">{s.title}</h2>
-            <p className="text-sm leading-relaxed text-(--text-secondary)">{s.content}</p>
-          </div>
+            <div className="flex items-start gap-4">
+              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-(--accent)/15 text-xs font-bold text-(--accent)">
+                {i + 1}
+              </span>
+              <div>
+                <h2 className="mb-1.5 text-sm font-semibold text-(--text-primary)">{s.title}</h2>
+                <p className="text-sm leading-relaxed text-(--text-secondary)">{s.content}</p>
+              </div>
+            </div>
+          </GlassCard>
         ))}
       </div>
 

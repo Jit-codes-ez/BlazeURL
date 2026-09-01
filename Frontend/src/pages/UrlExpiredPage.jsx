@@ -1,15 +1,16 @@
 import { Link } from 'react-router-dom'
 import { Clock, RotateCcw, ArrowRight } from 'lucide-react'
+import GlassCard from '../components/GlassCard'
 
 function ExpiredPage() {
   return (
     <div className="flex min-h-[70vh] flex-col items-center justify-center px-4 text-center">
-      <div
+      <GlassCard
         className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl border border-amber-500/20 bg-amber-500/10"
         style={{ animation: 'popUp 0.45s cubic-bezier(0.34,1.56,0.64,1) both' }}
       >
-        <Clock size={28} className="text-amber-500" />
-      </div>
+        <Clock size={30} className="text-amber-500" />
+      </GlassCard>
 
       <h1
         className="text-2xl font-bold text-(--text-primary)"
@@ -37,13 +38,13 @@ function ExpiredPage() {
           <RotateCcw size={14} />
           Shorten a new URL
         </Link>
-        <Link
+        <GlassCard Link
           to="/login"
           className="flex items-center gap-1.5 text-sm font-medium text-(--accent) hover:brightness-110"
         >
           Sign in for permanent links
           <ArrowRight size={13} />
-        </Link>
+        </GlassCard>
       </div>
 
       <style>{`

@@ -1,9 +1,12 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import SmoothScroll from './components/SmoothScroll'
+import ScrollToTop from './components/ScrollToTop'
+import WelcomeLayout from './components/WelcomeLayout'
 import BackgroundLayout from './components/BackgroundLayout'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import Home from './pages/Home'
+import Login from './pages/Login'
 import URLExpiredPage from './pages/UrlExpiredPage'
 import URLNotFoundPage from './pages/UrlNotFoundPage'
 import PrivacyPolicy      from './pages/PrivacyPolicy'
@@ -16,6 +19,8 @@ import SessionExpiredPage from './pages/SessionExpiredPage'
 function App() {
   return (
     <BrowserRouter>
+    <ScrollToTop />
+    <WelcomeLayout />
     <BackgroundLayout>
     <SmoothScroll>
         <div className="relative z-10 flex min-h-screen flex-col">
@@ -24,6 +29,8 @@ function App() {
           <main className="flex-1">
             <Routes>
               <Route path="/" element={<Home />} />
+              
+              <Route path="/login" element={<Login />} />
               
               {/* Necessary routes for error handling and other pages */}
               <Route path="/error404" element={<URLExpiredPage />} />
