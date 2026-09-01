@@ -42,7 +42,7 @@ def get_active_temp_url(db: Session, short_code: str) -> TempURL:
 
     return temp_url
 
-
-def register_click(db: Session, temp_url: TempURL) -> None:
-    temp_url.click_count += 1
+def delete_expired_urls(db: Session):
+    cutoff = datetime.now(timezone.utc) - timedelta(days=3)
+    db.query(TempURL).filter(TempURL.expires_at < cutoff).delete()
     db.commit()

@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends
 from fastapi.responses import RedirectResponse
 from sqlalchemy.orm import Session
+from fastapi import HTTPException
 
 from app.config import settings
 from app.database import get_db
@@ -21,9 +22,14 @@ def shorten_url(payload: ShortenRequest, db: Session = Depends(get_db)):
         expires_at=temp_url.expires_at,
     )
 
-
 @router.get("/{short_code}")
 def redirect_short_url(short_code: str, db: Session = Depends(get_db)):
-    temp_url = temp_url_service.get_active_temp_url(db, short_code)
-    temp_url_service.register_click(db, temp_url)
-    return RedirectResponse(url=temp_url.original_url, status_code=307)
+    try:
+        temp_url = temp_url_service.get_active_temp_url(db, short_code)
+        return RedirectResponse(url=temp_url.original_url, status_code=307)
+    except HTTPException as e:
+        if e.status_code == 410:
+            return RedirectResponse(url=f"{settings.frontend_base_url}/error410", status_code=307)
+        return RedirectResponse(url=f"{settings.frontend_base_url}/error404", status_code=307)
+
+

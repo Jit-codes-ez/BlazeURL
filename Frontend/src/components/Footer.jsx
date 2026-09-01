@@ -18,14 +18,14 @@ function Footer() {
           <div className="flex flex-wrap items-center gap-6 text-sm text-(--text-secondary)">
 
             <Link
-              to="#"
+              to="/privacy"
               className="transition-colors hover:text-(--text-primary)"
             >
-              Privacy
+              Privacy Policy
             </Link>
 
             <Link
-              to = "#"
+              to="/terms"
               className="transition-colors hover:text-(--text-primary)"
             >
               Terms & Conditions

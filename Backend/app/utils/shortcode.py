@@ -14,11 +14,6 @@ def generate_code(length: int = CODE_LENGTH) -> str:
 
 
 def generate_unique_short_code(db: Session) -> str:
-    """
-    Generates a random short code and retries on the rare collision.
-    secrets.choice is cryptographically random, so collisions are extremely
-    unlikely at this length/alphabet, but we check anyway rather than assume.
-    """
     for _ in range(5):
         code = generate_code()
         exists = db.query(TempURL).filter(TempURL.short_code == code).first()

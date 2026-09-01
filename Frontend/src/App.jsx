@@ -4,6 +4,14 @@ import BackgroundLayout from './components/BackgroundLayout'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import Home from './pages/Home'
+import URLExpiredPage from './pages/UrlExpiredPage'
+import URLNotFoundPage from './pages/UrlNotFoundPage'
+import PrivacyPolicy      from './pages/PrivacyPolicy'
+import TermsAndConditions from './pages/TermsAndConditions'
+import PageNotFound from './pages/NotFoundPage'
+import ServerErrorPage    from './pages/ServerErrorPage'
+import OfflinePage        from './pages/OfflinePage'
+import SessionExpiredPage from './pages/SessionExpiredPage'
 
 function App() {
   return (
@@ -16,6 +24,16 @@ function App() {
           <main className="flex-1">
             <Routes>
               <Route path="/" element={<Home />} />
+              
+              {/* Necessary routes for error handling and other pages */}
+              <Route path="/error404" element={<URLExpiredPage />} />
+              <Route path="/error410" element={<URLNotFoundPage />} />
+              <Route path="/not-found" element={<PageNotFound />} />
+              <Route path="/server-error" element={<ServerErrorPage />} />
+              <Route path="/offline" element={<OfflinePage />} />
+              <Route path="/session-expired" element={<SessionExpiredPage />} />
+              <Route path="/privacy" element={<PrivacyPolicy />} />
+              <Route path="/terms" element={<TermsAndConditions />} />
             </Routes>
           </main>
 
