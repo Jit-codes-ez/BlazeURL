@@ -6,6 +6,7 @@ import BackgroundLayout from './components/BackgroundLayout'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import Home from './pages/Home'
+import Signup from './pages/Signup'
 import Login from './pages/Login'
 import URLExpiredPage from './pages/UrlExpiredPage'
 import URLNotFoundPage from './pages/UrlNotFoundPage'
@@ -29,7 +30,7 @@ function App() {
           <main className="flex-1">
             <Routes>
               <Route path="/" element={<Home />} />
-              
+              <Route path="/register" element={<Signup />} />
               <Route path="/login" element={<Login />} />
               
               {/* Necessary routes for error handling and other pages */}

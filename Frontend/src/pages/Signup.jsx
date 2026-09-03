@@ -1,11 +1,16 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Loader2 } from 'lucide-react'
+import { Loader2, Zap } from 'lucide-react'
 import { supabase } from '../lib/supabaseClient'
 
 function GoogleIcon() {
   return (
-    <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 18 18"
+      aria-hidden="true"
+    >
       <path
         fill="#4285F4"
         d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.72v2.26h2.9c1.7-1.57 2.7-3.88 2.7-6.62z"
@@ -26,7 +31,7 @@ function GoogleIcon() {
   )
 }
 
-function Login() {
+function Signup() {
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(() => {
       const params = new URLSearchParams(window.location.search)
@@ -57,7 +62,7 @@ function Login() {
     return () => window.removeEventListener('pageshow', onPageShow)
   }, [])
 
-  const handleGoogleLogin = async () => {
+  const handleGoogleSignup = async () => {
     setError('')
     setLoading(true)
 
@@ -68,44 +73,56 @@ function Login() {
       },
     })
 
-    // Only reached if Supabase rejects the request before the redirect happens
-    // (e.g. misconfigured provider) — on success the browser navigates away.
     if (authError) {
-      setError('Something went wrong signing in. Please try again.')
+      setError('Something went wrong while creating your account. Please try again.')
       setLoading(false)
     }
   }
 
   return (
-    <div className="relative flex min-h-screen items-center justify-center px-4">
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden px-4">
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 -z-10 flex items-center justify-center"
       >
-        <div className="h-72 w-72 rounded-full bg-(--accent)/15 blur-[100px]" />
+        <div className="h-72 w-72 rounded-full bg-(--accent)/15 blur-[110px]" />
       </div>
 
-      <div className="w-full max-w-sm">
+      <div className="w-full max-w-xl">
+        <div className="glass-card p-8 sm:p-9">
 
-        <div className="glass-card p-8 text-center">
-          <h1 className="font-display text-2xl font-bold text-(--text-primary)">
-            Welcome back
-          </h1>
-          <p className="mt-2 text-sm text-(--text-secondary)">
-            Sign in to set link expiration, generate QR codes, and track
-            clicks.
-          </p>
+          <div className="mb-8 text-center">
+
+            <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-(--accent)/15 ring-1 ring-(--accent)/25">
+              <Zap
+                size={25}
+                className="text-(--accent)"
+              />
+            </div>
+
+            <h1 className="font-display text-2xl font-bold text-(--text-primary)">
+              Create your account
+            </h1>
+
+            <p className="mx-auto mt-2 max-w-xs text-sm leading-6 text-(--text-secondary)">
+              Join BlazeURL to manage your links, track clicks, and unlock
+              advanced features.
+            </p>
+          </div>
 
           <button
             type="button"
-            onClick={handleGoogleLogin}
+            onClick={handleGoogleSignup}
             disabled={loading}
-            className="mt-7 flex w-full items-center justify-center gap-3 rounded-xl border border-(--border-subtle) bg-(--bg-page) py-3 text-sm font-semibold text-(--text-primary) transition-colors hover:bg-(--text-primary)/5 disabled:cursor-not-allowed disabled:opacity-60"
+            className="flex w-full items-center justify-center gap-3 rounded-xl border border-(--border-subtle) bg-(--bg-page) py-3.5 text-sm font-semibold text-(--text-primary) shadow-sm transition hover:bg-(--text-primary)/5 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {loading ? (
               <>
-                <Loader2 size={18} className="animate-spin" />
-                Redirecting…
+                <Loader2
+                  size={18}
+                  className="animate-spin"
+                />
+                Redirecting...
               </>
             ) : (
               <>
@@ -116,22 +133,49 @@ function Login() {
           </button>
 
           {error && (
-            <p className="mt-4 text-sm text-rose-500">{error}</p>
+            <div className="mt-4 rounded-xl border border-rose-500/20 bg-rose-500/10 px-4 py-3 text-center text-sm text-rose-500">
+              {error}
+            </div>
           )}
 
-          <p className="mt-6 text-xs leading-5 text-(--text-secondary)">
+          <div className="my-6 flex items-center gap-3">
+            <div className="h-px flex-1 bg-(--border-subtle)" />
+
+            <span className="text-xs text-(--text-secondary)">
+              Secure authentication
+            </span>
+
+            <div className="h-px flex-1 bg-(--border-subtle)" />
+          </div>
+
+          <p className="text-center text-xs leading-5 text-(--text-secondary)">
             By continuing, you agree to BlazeURL's{' '}
-            <Link to="/terms" className="text-(--accent) hover:underline">
+            <Link
+              to="/terms"
+              className="text-(--accent) hover:underline"
+            >
               Terms
             </Link>{' '}
             and{' '}
-            <Link to="/privacy" className="text-(--accent) hover:underline">
+            <Link
+              to="/privacy"
+              className="text-(--accent) hover:underline"
+            >
               Privacy Policy
             </Link>
             .
           </p>
         </div>
 
+        <p className="mt-6 text-center text-sm text-(--text-secondary)">
+          Already have an account?{' '}
+          <Link
+            to="/login"
+            className="font-medium text-(--accent) hover:underline"
+          >
+            Sign in
+          </Link> 
+        </p>
         <p className="mt-6 text-center text-sm text-(--text-secondary)">
           <Link to="/" className="hover:text-(--text-primary)">
             ← Back to home
@@ -142,4 +186,4 @@ function Login() {
   )
 }
 
-export default Login
+export default Signup

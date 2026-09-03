@@ -49,7 +49,7 @@ function Navbar() {
 
           <div className="hidden items-center gap-7 md:flex">
 
-            <a href="/" className={navLinkClass}>
+            <a href="/register" className={navLinkClass}>
               Sign Up
             </a>
             <Link

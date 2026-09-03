@@ -25,8 +25,8 @@ def shorten_url(payload: ShortenRequest, db: Session = Depends(get_db)):
 @router.get("/{short_code}")
 def redirect_short_url(short_code: str, db: Session = Depends(get_db)):
     try:
-        temp_url = temp_url_service.get_active_temp_url(db, short_code)
-        return RedirectResponse(url=temp_url.original_url, status_code=307)
+        original_url = temp_url_service.get_active_temp_url(db, short_code)
+        return RedirectResponse(url=original_url, status_code=307)
     except HTTPException as e:
         if e.status_code == 410:
             return RedirectResponse(url=f"{settings.frontend_base_url}/error410", status_code=307)

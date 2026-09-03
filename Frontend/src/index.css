@@ -58,6 +58,20 @@ html[data-theme='dark'] {
   --bg-surface-hover: rgba(25, 25, 50, 0.7);
 }
 
+html.theme-transition,
+html.theme-transition *,
+html.theme-transition *::before,
+html.theme-transition *::after {
+  transition:
+    background-color 300ms ease,
+    color 300ms ease,
+    border-color 300ms ease,
+    fill 300ms ease,
+    stroke 300ms ease !important;
+  transition-delay: 0 !important;
+}
+
+
 * {
   box-sizing: border-box;
 }
