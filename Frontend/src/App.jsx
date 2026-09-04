@@ -35,8 +35,8 @@ function App() {
               <Route path="/dashboard" element={<Dashboard />} />
               
               {/* Necessary routes for error handling and other pages */}
-              <Route path="/error404" element={<URLExpiredPage />} />
-              <Route path="/error410" element={<URLNotFoundPage />} />
+              <Route path="/error404" element={<URLNotFoundPage />} />
+              <Route path="/error410" element={<URLExpiredPage />} />
               <Route path="/not-found" element={<PageNotFound />} />
               <Route path="/server-error" element={<ServerErrorPage />} />
               <Route path="/offline" element={<OfflinePage />} />

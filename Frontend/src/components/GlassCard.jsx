@@ -1,6 +1,6 @@
-function GlassCard({ children, className = '' }) {
+function GlassCard({ children, className = '', ...props }) {
   return (
-    <div className={`glass-card ${className}`}>
+    <div className={`glass-card ${className}`} {...props}>
       {children}
     </div>
   )

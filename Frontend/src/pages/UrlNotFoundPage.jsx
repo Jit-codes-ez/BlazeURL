@@ -1,5 +1,4 @@
-import { Link } from 'react-router-dom'
-import { LinkIcon, RotateCcw } from 'lucide-react'
+import { LinkIcon } from 'lucide-react'
 
 function NotFoundPage() {
   return (
@@ -25,19 +24,6 @@ function NotFoundPage() {
         This link doesn't exist. It may have been deleted or the URL could be
         wrong. Double-check and try again.
       </p>
-
-      <div
-        className="mt-8"
-        style={{ animation: 'popUp 0.45s cubic-bezier(0.34,1.56,0.64,1) 0.18s both' }}
-      >
-        <Link
-          to="/"
-          className="primary-button flex items-center gap-2 rounded-lg px-5 py-2.5 text-sm font-semibold no-underline"
-        >
-          <RotateCcw size={14} />
-          Back to BlazeURL
-        </Link>
-      </div>
 
       <style>{`
         @keyframes popUp {

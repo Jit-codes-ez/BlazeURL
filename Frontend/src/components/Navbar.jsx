@@ -63,7 +63,8 @@ function Navbar() {
     'rounded-[10px] bg-(--accent) px-5 py-2.5 text-sm font-semibold text-white shadow-[0_0_20px_var(--accent-glow)] transition-colors hover:brightness-110'
 
   const signOutClass =
-    'rounded-[10px] bg-rose-600 px-5 py-2.5 text-sm font-semibold text-white shadow-[0_0_20px_rgba(225,29,72,0.35)] transition-colors hover:bg-rose-700'
+    'rounded-[10px] bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow-[0_0_20px_rgba(220,50,50,0.5)] transition-colors hover:brightness-110'
+
 
   return (
     <>
@@ -131,7 +132,7 @@ function Navbar() {
               <button
                 type="button"
                 onClick={handleSignOut}
-                className="mt-2 rounded-xl bg-rose-600 px-4 py-3 text-center font-semibold text-white transition-colors hover:bg-rose-700"
+                className="mt-2 rounded-xl bg-red-600 px-4 py-3 text-center font-semibold text-white shadow-[0_0_20px_rgba(239,68,68,0.5)] transition-colors hover:brightness-110"
               >
                 Sign Out
               </button>
@@ -139,7 +140,7 @@ function Navbar() {
               <a
                 href="/auth"
                 onClick={closeMenu}
-                className="mt-2 rounded-xl bg-(--accent) px-4 py-3 text-center font-semibold text-white"
+                className="mt-2 rounded-xl border border-(--accent) bg-(--accent) px-4 py-3 text-center font-semibold text-white transition-colors hover:bg-(--accent)/80"
               >
                 Sign In
               </a>

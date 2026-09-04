@@ -69,10 +69,8 @@ function GoogleAuth() {
         }
 
         setSuccess(true)
+        navigate('/dashboard')
 
-        setTimeout(() => {
-          navigate('/dashboard', { replace: true })
-        }, 1000)
       } catch (err) {
         console.error('Auth error:', err)
         setError(err.message || 'Something went wrong. Please try again.')

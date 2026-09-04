@@ -30,9 +30,7 @@ def delete_temp_url(short_code: str) -> None:
 
 
 USER_PREFIX = "user:"
-USER_CACHE_TTL_SECONDS = 24 * 60 * 60  # 24h — bounded, not permanent, so a
-                                        # stale entry self-heals even if an
-                                        # invalidation call is ever missed
+USER_CACHE_TTL_SECONDS = 24 * 60 * 60  # 24h — bounded, not permanent, so a stale entry self-heals even if an invalidation call is ever missed
 
 
 def store_user(
@@ -59,4 +57,30 @@ def get_user(user_id: str) -> dict | None:
 def delete_user(user_id: str) -> None:
     key = f"{USER_PREFIX}{user_id}"
 
+    redis_client.delete(key)
+
+USER_URL_PREFIX = "user_url:"
+USER_URL_CACHE_TTL_SECONDS = 24 * 60 * 60  # 24h — bounded, not permanent, so a stale entry self-heals even if an invalidation call is ever missed
+
+
+def store_user_url(
+    short_code: str,
+    original_url: str,
+    ttl_seconds: int = USER_URL_CACHE_TTL_SECONDS,
+) -> None:
+    key = f"{USER_URL_PREFIX}{short_code}"
+    redis_client.set(
+        key,
+        original_url,
+        ex=ttl_seconds,
+    )
+
+
+def get_user_url(short_code: str) -> str | None:
+    key = f"{USER_URL_PREFIX}{short_code}"
+    return redis_client.get(key)
+
+
+def delete_user_url(short_code: str) -> None:
+    key = f"{USER_URL_PREFIX}{short_code}"
     redis_client.delete(key)
