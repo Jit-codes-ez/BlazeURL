@@ -59,7 +59,7 @@ def get_active_temp_url(db: Session, short_code: str) -> str:
 
     return temp_url.original_url
 
-def delete_expired_urls(db: Session):  #Only delete URLs that have been expired for more than 3 days
-    cutoff = datetime.now(timezone.utc) - timedelta(days=3)
+def delete_expired_urls(db: Session):  #Only delete URLs that have been expired for more than 1 day
+    cutoff = datetime.now(timezone.utc) - timedelta(days=1)
     db.query(TempURL).filter(TempURL.expires_at < cutoff).delete()
     db.commit()

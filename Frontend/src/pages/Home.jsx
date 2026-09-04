@@ -161,7 +161,7 @@ function Home() {
                 unlock the full BlazeURL experience.
               </p>
 
-              <Link to="/register" className="primary-button mt-7 inline-flex">
+              <Link to="/auth" className="primary-button mt-7 inline-flex">
                 Create Free Account
               </Link>
             </GlassCard>

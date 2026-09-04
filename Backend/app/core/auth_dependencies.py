@@ -1,4 +1,4 @@
-from fastapi import Depends, HTTPException, status
+from fastapi import Depends
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
 from app.core.security import verify_token
@@ -6,9 +6,13 @@ from app.core.security import verify_token
 security = HTTPBearer()
 
 
-def get_current_user(
+async def get_current_user(
     credentials: HTTPAuthorizationCredentials = Depends(security),
-):
-    payload = verify_token(credentials.credentials)
-
+) -> dict:
+    """Returns the decoded JWT payload. Key fields:
+    - payload["sub"]   -> Supabase user id (UUID string)
+    - payload["email"] -> user's email
+    - payload["user_metadata"] -> dict, may contain "full_name", "avatar_url", etc.
+    """
+    payload = await verify_token(credentials.credentials)
     return payload

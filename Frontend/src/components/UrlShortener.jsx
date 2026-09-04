@@ -128,7 +128,7 @@ function ResultCard({ result, onCopy, copied }) {
           </div>
 
           <a
-            href="/login"
+            href="/auth"
             className="primary-button flex shrink-0 items-center justify-center gap-2 rounded-lg px-5 py-2 text-sm font-semibold no-underline"
           >
             <LogIn size={14} />

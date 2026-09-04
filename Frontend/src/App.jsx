@@ -6,8 +6,9 @@ import BackgroundLayout from './components/BackgroundLayout'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import Home from './pages/Home'
-import Signup from './pages/Signup'
-import Login from './pages/Login'
+import GoogleAuth from './pages/GoogleAuth'
+
+import Dashboard from './pages/Dashboard'
 import URLExpiredPage from './pages/UrlExpiredPage'
 import URLNotFoundPage from './pages/UrlNotFoundPage'
 import PrivacyPolicy      from './pages/PrivacyPolicy'
@@ -30,8 +31,8 @@ function App() {
           <main className="flex-1">
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/register" element={<Signup />} />
-              <Route path="/login" element={<Login />} />
+              <Route path="/auth" element={<GoogleAuth />} />
+              <Route path="/dashboard" element={<Dashboard />} />
               
               {/* Necessary routes for error handling and other pages */}
               <Route path="/error404" element={<URLExpiredPage />} />

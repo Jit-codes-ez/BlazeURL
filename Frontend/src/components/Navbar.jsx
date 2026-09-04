@@ -1,12 +1,15 @@
 import { Menu, X } from 'lucide-react'
 import { useState, useEffect, useRef } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import ThemeToggle from './ThemeToggle'
-import { Link } from 'react-router-dom'
-
+import { supabase } from '../lib/supabaseClient'
 
 function Navbar() {
+  const navigate = useNavigate()
+
   const [open, setOpen] = useState(false)
   const [visible, setVisible] = useState(true)
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
   const lastScrollY = useRef(0)
 
   const closeMenu = () => setOpen(false)
@@ -16,14 +19,11 @@ function Navbar() {
       const current = window.scrollY
 
       if (current < 10) {
-        // Always show at the very top
         setVisible(true)
       } else if (current > lastScrollY.current) {
-        // Scrolling down — hide
         setVisible(false)
         setOpen(false)
       } else {
-        // Scrolling up — show
         setVisible(true)
       }
 
@@ -34,7 +34,36 @@ function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  const navLinkClass = 'text-sm font-medium text-(--text-secondary) transition-colors hover:text-(--text-primary)'
+  // Reflects real auth state, not the current route — so the button is
+  // correct on every page, not just while on /dashboard.
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setIsAuthenticated(!!session)
+    })
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setIsAuthenticated(!!session)
+    })
+
+    return () => subscription.unsubscribe()
+  }, [])
+
+  const handleSignOut = async () => {
+    closeMenu()
+    await supabase.auth.signOut()
+    navigate('/', { replace: true })
+  }
+
+  const navLinkClass =
+    'text-sm font-medium text-(--text-secondary) transition-colors hover:text-(--text-primary)'
+
+  const signInClass =
+    'rounded-[10px] bg-(--accent) px-5 py-2.5 text-sm font-semibold text-white shadow-[0_0_20px_var(--accent-glow)] transition-colors hover:brightness-110'
+
+  const signOutClass =
+    'rounded-[10px] bg-rose-600 px-5 py-2.5 text-sm font-semibold text-white shadow-[0_0_20px_rgba(225,29,72,0.35)] transition-colors hover:bg-rose-700'
 
   return (
     <>
@@ -48,16 +77,19 @@ function Navbar() {
           </a>
 
           <div className="hidden items-center gap-7 md:flex">
-
-            <a href="/register" className={navLinkClass}>
-              Sign Up
+            <a href="#" className={navLinkClass}>
+              How It Works
             </a>
-            <Link
-              to="/login"
-              className="rounded-[10px] bg-(--accent) px-5 py-2.5 text-sm font-semibold text-white shadow-[0_0_20px_var(--accent-glow)] transition-colors hover:brightness-110"
-            >
-              Log In
-            </Link>
+
+            {isAuthenticated ? (
+              <button type="button" onClick={handleSignOut} className={signOutClass}>
+                Sign Out
+              </button>
+            ) : (
+              <Link to="/auth" className={signInClass}>
+                Sign In
+              </Link>
+            )}
 
             <ThemeToggle />
           </div>
@@ -80,33 +112,38 @@ function Navbar() {
 
       {open && (
         <div
+
+        
+
           className="fixed left-0 right-0 top-18 z-40 border-b border-(--border-subtle) bg-(--bg-header-mobile) p-5 backdrop-blur-xl transition-all duration-300 md:hidden"
           style={{ transform: visible ? 'translateY(0)' : 'translateY(-200%)' }}
         >
           <div className="flex flex-col gap-2">
             <a
-              href="/#features"
-              onClick={closeMenu}
-              className="rounded-xl px-4 py-3 text-(--text-secondary) transition-colors hover:bg-(--text-primary)/5 hover:text-(--text-primary)"
-            >
-              Features
-            </a>
-
-            <a
               href="#"
               onClick={closeMenu}
-              className="rounded-xl px-4 py-3 text-(--text-secondary) transition-colors hover:bg-(--text-primary)/5 hover:text-(--text-primary)"
+              className="block text-center rounded-xl px-4 py-3 text-(--text-secondary) transition-colors hover:bg-(--text-primary)/5 hover:text-(--text-primary)"
             >
-              Login
+              How It Works
             </a>
 
-            <a
-              href="#"
-              onClick={closeMenu}
-              className="mt-2 rounded-xl bg-(--accent) px-4 py-3 text-center font-semibold text-white"
-            >
-              Get Started
-            </a>
+            {isAuthenticated ? (
+              <button
+                type="button"
+                onClick={handleSignOut}
+                className="mt-2 rounded-xl bg-rose-600 px-4 py-3 text-center font-semibold text-white transition-colors hover:bg-rose-700"
+              >
+                Sign Out
+              </button>
+            ) : (
+              <a
+                href="/auth"
+                onClick={closeMenu}
+                className="mt-2 rounded-xl bg-(--accent) px-4 py-3 text-center font-semibold text-white"
+              >
+                Sign In
+              </a>
+            )}
           </div>
         </div>
       )}

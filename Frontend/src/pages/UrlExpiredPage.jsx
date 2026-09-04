@@ -39,7 +39,7 @@ function ExpiredPage() {
           Shorten a new URL
         </Link>
         <GlassCard Link
-          to="/login"
+          to="/auth"
           className="flex items-center gap-1.5 text-sm font-medium text-(--accent) hover:brightness-110"
         >
           Sign in for permanent links

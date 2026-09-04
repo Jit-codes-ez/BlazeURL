@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState, useEffect, useRef, useId } from 'react'
 import { X, Zap, Clock, BarChart2, QrCode, Lock, LogIn, Check } from 'lucide-react'
 
 const freeFeatures = [
@@ -14,136 +14,175 @@ const proFeatures = [
   { icon: <Zap size={14} />,       text: 'Custom expiry control' },
 ]
 
-function WelcomeModal() {
-  const [visible, setVisible] = useState(false)
+// module scope — shared across every instance of this component
+let activeInstance = null
 
-useEffect(() => {
-  async function checkWelcome() {
-    const seen = localStorage.getItem('blaze_welcome_seen')
-    if (!seen) {
-      setVisible(true)
+export default function WelcomeModal() {
+  const [state, setState] = useState('hidden')
+  const dismissed = useRef(false)
+  const instanceId = useId()
+
+  useEffect(() => {
+    const t = setTimeout(() => {
+      if (sessionStorage.getItem('bwseen')) return
+      if (activeInstance && activeInstance !== instanceId) {
+        // another instance already claimed the modal — don't open a second one
+        return
+      }
+      activeInstance = instanceId
+      setState('open')
+    }, 50)
+    return () => {
+      clearTimeout(t)
+      if (activeInstance === instanceId) activeInstance = null
     }
-  }
-  checkWelcome()
-}, [])
+  }, [instanceId])
 
-  const dismiss = () => {
-    localStorage.setItem('blaze_welcome_seen', '1')
-    setVisible(false)
+  const dismiss = (then) => {
+    if (dismissed.current) return
+    dismissed.current = true
+    sessionStorage.setItem('bwseen', '1')
+    if (activeInstance === instanceId.current) activeInstance = null
+    setState('closing')
+    setTimeout(() => {
+      setState('hidden')
+      if (typeof then === 'function') then()
+    }, 380)
   }
 
-  if (!visible) return null
+  useEffect(() => {
+    const fn = (e) => { if (e.key === 'Escape') dismiss() }
+    window.addEventListener('keydown', fn)
+    return () => window.removeEventListener('keydown', fn)
+  }, [])
+
+  if (state === 'hidden') return null
+
+  const closing = state === 'closing'
 
   return (
-    <div
-      className="fixed inset-0 z-[100] flex items-center justify-center px-4"
-      style={{ animation: 'fadeIn 0.2s ease both' }}
-    >
+    <>
+      <style>{`
+        @keyframes wmBgIn  { from{opacity:0} to{opacity:1} }
+        @keyframes wmBgOut { from{opacity:1} to{opacity:0} }
+        @keyframes wmIn  { from{opacity:0;transform:translateY(28px) scale(.93)} to{opacity:1;transform:translateY(0) scale(1)} }
+        @keyframes wmOut { from{opacity:1;transform:translateY(0) scale(1)} to{opacity:0;transform:translateY(18px) scale(.95)} }
+      `}</style>
+
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-black/70 backdrop-blur-md"
-        onClick={dismiss}
-      />
-
-      {/* Modal */}
-      <div
-        className="relative w-full max-w-md overflow-hidden rounded-3xl border border-white/10 bg-[#0f0f0f] shadow-2xl md:max-w-xl lg:max-w-2xl"
-        style={{ animation: 'popUp 0.45s cubic-bezier(0.34,1.56,0.64,1) both' }}
+        onClick={(e) => { e.stopPropagation(); dismiss() }}
+        style={{
+          position: 'fixed', inset: 0, zIndex: 200,
+          display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16,
+          background: 'rgba(0,0,0,0.72)',
+          backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
+          animation: closing ? 'wmBgOut 0.38s ease forwards' : 'wmBgIn 0.3s ease forwards',
+        }}
       >
-        {/* Top accent bar */}
-        <div className="h-1 w-full bg-gradient-to-r from-transparent via-(--accent) to-transparent opacity-80" />
-
-        {/* Close button */}
-        <button
-          onClick={dismiss}
-          className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full bg-white/5 text-white/40 transition-colors hover:bg-white/10 hover:text-white md:right-5 md:top-5 md:h-9 md:w-9"
-          aria-label="Close"
+        {/* Modal */}
+        <div
+          onClick={e => e.stopPropagation()}
+          style={{
+            position: 'relative',
+            width: '100%', maxWidth: 440,
+            borderRadius: 24,
+            border: '1px solid rgba(255,255,255,0.10)',
+            background: '#0f0f0f',
+            boxShadow: '0 32px 80px rgba(0,0,0,0.65)',
+            overflow: 'hidden',
+            animation: closing
+              ? 'wmOut 0.38s cubic-bezier(0.4,0,1,1) forwards'
+              : 'wmIn 0.45s cubic-bezier(0.22,1,0.36,1) forwards',
+          }}
         >
-          <X size={15} />
-        </button>
+          {/* Accent bar */}
+          <div style={{ height: 3, background: 'linear-gradient(90deg,transparent,var(--accent),transparent)', opacity: .85 }} />
 
-        <div className="p-7 md:p-10">
-          {/* Header */}
-          <div className="mb-7 flex flex-col items-center text-center md:mb-9">
-            <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-(--accent)/15 ring-1 ring-(--accent)/30 md:h-16 md:w-16">
-              <Zap size={24} className="text-(--accent) md:h-7 md:w-7" />
-            </div>
-            <h2 className="text-2xl font-bold tracking-tight text-white md:text-3xl">
-              Welcome to BlazeURL
-            </h2>
-            <p className="mt-1.5 text-sm text-white/50 md:mt-2 md:text-base">
-              Here's what you can do — with or without an account.
-            </p>
-          </div>
+          {/* Close button */}
+          <button
+            onClick={() => dismiss()}
+            style={{
+              position: 'absolute', top: 14, right: 14,
+              width: 30, height: 30, borderRadius: '50%',
+              border: 'none', background: 'rgba(255,255,255,0.07)',
+              color: 'rgba(255,255,255,0.45)', cursor: 'pointer',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}
+          >
+            <X size={14} />
+          </button>
 
-          {/* Feature columns */}
-          <div className="mb-5 grid grid-cols-2 gap-3 md:mb-8 md:gap-5">
-            {/* Without account */}
-            <div className="flex flex-col gap-3 rounded-2xl border border-white/8 bg-white/4 p-4 md:gap-4 md:p-6">
-              <p className="text-[11px] font-semibold uppercase tracking-widest text-white/35 md:text-xs">
-                No account
+          <div style={{ padding: 28 }}>
+
+            {/* Header */}
+            <div style={{ textAlign: 'center', marginBottom: 22 }}>
+              <div style={{
+                width: 52, height: 52, borderRadius: 14, margin: '0 auto 14px',
+                background: 'rgba(249,115,22,0.14)',
+                boxShadow: '0 0 0 1px rgba(249,115,22,0.28)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}>
+                <Zap size={22} color="var(--accent)" />
+              </div>
+              <h2 style={{ margin: 0, fontSize: 20, fontWeight: 700, color: '#fff', letterSpacing: '-0.3px' }}>
+                Welcome to BlazeURL
+              </h2>
+              <p style={{ margin: '6px 0 0', fontSize: 13, color: 'rgba(255,255,255,0.42)' }}>
+                Here's what you can do — with or without an account.
               </p>
-              <ul className="flex flex-col gap-2.5 md:gap-3.5">
-                {freeFeatures.map(({ icon, text }) => (
-                  <li key={text} className="flex items-center gap-2.5 md:gap-3">
-                    <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-white/8 text-white/50 md:h-7 md:w-7">
-                      {icon}
-                    </span>
-                    <span className="text-xs text-white/70 md:text-sm">{text}</span>
-                  </li>
-                ))}
-              </ul>
             </div>
 
-            {/* With account */}
-            <div className="flex flex-col gap-3 rounded-2xl border border-(--accent)/20 bg-(--accent)/8 p-4 md:gap-4 md:p-6">
-              <p className="text-[11px] font-semibold uppercase tracking-widest text-(--accent) md:text-xs">
-                ✦ With account
-              </p>
-              <ul className="flex flex-col gap-2.5 md:gap-3.5">
-                {proFeatures.map(({ icon, text }) => (
-                  <li key={text} className="flex items-center gap-2.5 md:gap-3">
-                    <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-(--accent)/15 text-(--accent) md:h-7 md:w-7">
-                      {icon}
-                    </span>
-                    <span className="text-xs text-white/80 md:text-sm">{text}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
+            {/* Columns */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 18 }}>
 
-          {/* Actions */}
-          <div className="flex flex-col gap-2 md:gap-3">
-            <a
-              href="/login"
-              className="flex w-full items-center justify-center gap-2 rounded-xl bg-(--accent) py-3 text-sm font-semibold text-white shadow-[0_0_24px_var(--accent-glow)] transition-all hover:brightness-110 no-underline md:py-4 md:text-base"
-            >
-              <LogIn size={14} />
-              Sign in — it's free
-            </a>
-            <button
-              onClick={dismiss}
-              className="w-full rounded-xl py-3 text-sm font-medium text-white/40 transition-colors hover:bg-white/5 hover:text-white/70 md:py-3.5 md:text-base"
-            >
-              Continue without account
-            </button>
+              <div style={{ borderRadius: 14, border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.04)', padding: 14 }}>
+                <p style={{ margin: '0 0 10px', fontSize: 10, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.30)' }}>No account</p>
+                <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: 9 }}>
+                  {freeFeatures.map(({ icon, text }) => (
+                    <li key={text} style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
+                      <span style={{ width: 24, height: 24, borderRadius: 7, background: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.45)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>{icon}</span>
+                      <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.60)' }}>{text}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div style={{ borderRadius: 14, border: '1px solid rgba(249,115,22,0.22)', background: 'rgba(249,115,22,0.08)', padding: 14 }}>
+                <p style={{ margin: '0 0 10px', fontSize: 10, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--accent)' }}>✦ With account</p>
+                <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: 9 }}>
+                  {proFeatures.map(({ icon, text }) => (
+                    <li key={text} style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
+                      <span style={{ width: 24, height: 24, borderRadius: 7, background: 'rgba(249,115,22,0.15)', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>{icon}</span>
+                      <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.75)' }}>{text}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+            </div>
+
+            {/* Buttons */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              <a
+                href="/auth"
+                onClick={e => { e.preventDefault(); dismiss(() => { window.location.href = '/auth' }) }}
+                className="primary-button"
+                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, textDecoration: 'none', borderRadius: 13, padding: '13px 20px', fontSize: 14 }}
+              >
+                <LogIn size={14} /> Continue with Google
+              </a>
+              <button
+                onClick={() => dismiss()}
+                style={{ padding: 12, borderRadius: 13, border: 'none', background: 'transparent', fontSize: 13, fontWeight: 500, color: 'rgba(255,255,255,0.35)', cursor: 'pointer' }}
+              >
+                Continue without account
+              </button>
+            </div>
+
           </div>
         </div>
       </div>
-
-      <style>{`
-        @keyframes fadeIn {
-          from { opacity: 0; }
-          to   { opacity: 1; }
-        }
-        @keyframes popUp {
-          from { opacity: 0; transform: translateY(24px) scale(0.96); }
-          to   { opacity: 1; transform: translateY(0) scale(1); }
-        }
-      `}</style>
-    </div>
+    </>
   )
 }
-
-export default WelcomeModal

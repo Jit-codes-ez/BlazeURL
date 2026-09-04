@@ -31,7 +31,7 @@ function SessionExpiredPage() {
         style={{ animation: 'popUp 0.45s cubic-bezier(0.34,1.56,0.64,1) 0.18s both' }}
       >
         <Link
-          to="/login"
+          to="/auth"
           className="primary-button flex items-center gap-2 rounded-lg px-5 py-2.5 text-sm font-semibold no-underline"
         >
           <LogIn size={14} />
