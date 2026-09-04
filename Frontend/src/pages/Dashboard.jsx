@@ -50,6 +50,19 @@ function isActive(url) {
   return new Date(url.expires_at).getTime() > Date.now()
 }
 
+function getExpiryClass(expiresAt) {
+  if (!expiresAt) return 'text-blue-400'
+
+  const diffMs = new Date(expiresAt).getTime() - Date.now()
+  const hours = diffMs / (1000 * 60 * 60)
+
+  if (hours <= 0) return 'text-red-500'
+  if (hours <= 24) return 'text-red-500'
+  if (hours <= 72) return 'text-amber-500'
+
+  return 'text-emerald-500'
+}
+
 function Dashboard() {
   const navigate = useNavigate()
 
@@ -327,73 +340,123 @@ function Dashboard() {
           </div>
         </section>
 
-        {/* Stats */}
-        <section className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <StatCard icon={<Link2 size={20} />}      label="Total Links"   value={urls.length} />
-          <StatCard icon={<TrendingUp size={20} />} label="Total Visits"  value={totalClicks} />
-          <StatCard icon={<BarChart3 size={20} />}  label="Avg. Visits"   value={avgClicks} />
-          <StatCard icon={<Clock3 size={20} />}     label="Active Links"  value={activeCount} />
-        </section>
+{/* Stats */}
+<section className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+  <StatCard
+  icon={<Link2 size={20} />}
+  iconClass="text-(--accent)"
+  label="Total Links"
+  value={urls.length}
+/>
 
-        {/* URLs */}
-        <section className="glass-card overflow-hidden">
-          <div className="border-b border-(--border-subtle) p-5">
-            <h2 className="font-display text-lg font-bold text-(--text-primary)">My URLs</h2>
-            <p className="mt-1 text-xs text-(--text-secondary)">Manage your recently created links.</p>
-          </div>
+<StatCard
+  icon={<TrendingUp size={20} />}
+  iconClass="text-blue-400"
+  label="Total Visits"
+  value={totalClicks}
+/>
 
-          {urlsLoading ? (
-            <div className="flex items-center justify-center py-20">
-              <div className="h-7 w-7 animate-spin rounded-full border-2 border-(--accent)/20 border-t-(--accent)" />
-            </div>
-          ) : urlsError ? (
-            <div className="flex flex-col items-center justify-center px-6 py-16 text-center">
-              <p className="text-sm text-rose-500">{urlsError}</p>
-              <button
-                type="button"
-                onClick={fetchUrls}
-                className="mt-4 rounded-xl border border-(--border-subtle) px-4 py-2 text-sm font-medium text-(--text-primary) transition hover:bg-(--text-primary)/5"
-              >
-                Try again
-              </button>
-            </div>
-          ) : urls.length === 0 ? (
-            <EmptyState />
-          ) : (
-            <div className="divide-y divide-(--border-subtle)">
-              {urls.map((url) => (
-                <div
-                  key={url.id}
-                  className="group p-5 transition hover:bg-(--text-primary)/2"
+<StatCard
+  icon={<BarChart3 size={20} />}
+  iconClass="text-purple-400"
+  label="Avg. Visits"
+  value={avgClicks}
+/>
+
+<StatCard
+  icon={<Clock3 size={20} />}
+  iconClass="text-emerald-400"
+  label="Active Links"
+  value={activeCount}
+/>
+</section>
+
+{/* URLs */}
+<section className="glass-card overflow-hidden">
+  <div className="border-b border-(--border-subtle) p-5">
+    <h2 className="font-display text-lg font-bold text-(--text-primary)">
+      My URLs
+    </h2>
+    <p className="mt-1 text-xs text-(--text-secondary)">
+      Manage your recently created links.
+    </p>
+  </div>
+
+  {urlsLoading ? (
+    <div className="flex items-center justify-center py-20">
+      <div className="h-7 w-7 animate-spin rounded-full border-2 border-(--accent)/20 border-t-(--accent)" />
+    </div>
+  ) : urlsError ? (
+    <div className="flex flex-col items-center justify-center px-6 py-16 text-center">
+      <p className="text-sm text-rose-500">{urlsError}</p>
+
+      <button
+        type="button"
+        onClick={fetchUrls}
+        className="mt-4 rounded-xl border border-(--border-subtle) px-4 py-2 text-sm font-medium text-(--text-primary) transition hover:bg-(--text-primary)/5"
+      >
+        Try again
+      </button>
+    </div>
+  ) : urls.length === 0 ? (
+    <EmptyState />
+  ) : (
+    <div className="divide-y divide-(--border-subtle)">
+      {urls.map((url) => (
+        <div
+          key={url.id}
+          className="group p-5 transition hover:bg-(--text-primary)/2"
+        >
+          <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+
+            {/* URL info */}
+            <div className="min-w-0 flex-1">
+
+              {/* Short URL */}
+              <div className="mb-2 flex items-center gap-2">
+                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-(--accent)/10 text-(--accent)">
+                  <Link2 size={16} />
+                </div>
+
+                <span className="truncate font-semibold text-(--accent)">
+                  {url.short_url}
+                </span>
+              </div>
+
+              {/* Original URL */}
+              <p className="truncate text-sm text-(--text-secondary)">
+                {url.original_url}
+              </p>
+
+              {/* Metadata */}
+              <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs">
+
+                {/* Visits */}
+                <span className="flex items-center gap-1.5 font-medium text-rose-500">
+                  <TrendingUp size={13} />
+                  {url.click_count} clicks
+                </span>
+
+                {/* Created */}
+                <span className="flex items-center gap-1.5 text-yellow-300">
+                  Created {formatDate(url.created_at)}
+                </span>
+
+                {/* Expiry */}
+                <span
+                  className={`flex items-center gap-1.5 font-medium ${getExpiryClass(
+                    url.expires_at
+                  )}`}
                 >
-                  <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
-                    {/* URL info */}
-                    <div className="min-w-0 flex-1">
-                      <div className="mb-2 flex items-center gap-2">
-                        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-(--accent)/10 text-(--accent)">
-                          <Link2 size={16} />
-                        </div>
-                        <span className="truncate font-semibold text-(--accent)">
-                          {url.short_url}
-                        </span>
-                      </div>
+                  <Clock3 size={13} />
 
-                      <p className="truncate text-sm text-(--text-secondary)">
-                        {url.original_url}
-                      </p>
+                  {url.expires_at
+                    ? `Expires in ${formatExpiry(url.expires_at)}`
+                    : 'Never expires'}
+                </span>
 
-                      <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-(--text-secondary)">
-                        <span className="flex items-center gap-1.5">
-                          <TrendingUp size={13} />
-                          {url.click_count} clicks
-                        </span>
-                        <span>Created {formatDate(url.created_at)}</span>
-                        <span className="flex items-center gap-1.5">
-                          <Clock3 size={13} />
-                          {url.expires_at ? `Expires in ${formatExpiry(url.expires_at)}` : 'Never expires'}
-                        </span>
-                      </div>
-                    </div>
+              </div>
+            </div>
 
                     {/* Actions */}
                     <div className="flex shrink-0 items-center gap-2">
@@ -540,14 +603,22 @@ function Dashboard() {
   )
 }
 
-function StatCard({ icon, label, value }) {
+function StatCard({ icon, iconClass, label, value }) {
   return (
     <div className="glass-card p-5">
-      <div className="mb-5 flex h-10 w-10 items-center justify-center rounded-xl bg-(--accent)/10 text-(--accent)">
+      <div
+        className={`mb-5 flex h-10 w-10 items-center justify-center rounded-xl bg-(--accent)/10 ${iconClass}`}
+      >
         {icon}
       </div>
-      <p className="text-xs font-medium text-(--text-secondary)">{label}</p>
-      <p className="mt-1 font-display text-2xl font-bold text-(--text-primary)">{value}</p>
+
+      <p className="text-xs font-medium text-(--text-secondary)">
+        {label}
+      </p>
+
+      <p className="mt-1 font-display text-2xl font-bold text-(--text-primary)">
+        {value}
+      </p>
     </div>
   )
 }
