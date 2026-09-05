@@ -121,7 +121,7 @@ function Navbar() {
         >
           <div className="flex flex-col gap-2">
             <a
-              href="#"
+              href="/workings"
               onClick={closeMenu}
               className="block text-center rounded-xl px-4 py-3 text-(--text-secondary) transition-colors hover:bg-(--text-primary)/5 hover:text-(--text-primary)"
             >
