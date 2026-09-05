@@ -255,7 +255,6 @@ html[data-theme='light'] .url-input:focus {
 }
 
 /* Marquee */
-
 @keyframes marquee-scroll {
   0% {
     transform: translateX(100vw);
