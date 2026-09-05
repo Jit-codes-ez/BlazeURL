@@ -254,3 +254,19 @@ html[data-theme='light'] .url-input:focus {
   }
 }
 
+/* Marquee */
+
+@keyframes marquee-scroll {
+  0% {
+    transform: translateX(100vw);
+  }
+
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.animate-marquee {
+  display: inline-flex;
+  animation: marquee-scroll 22s linear infinite;
+}

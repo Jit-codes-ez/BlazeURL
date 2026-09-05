@@ -4,6 +4,7 @@ import ScrollToTop from './components/ScrollToTop'
 import WelcomeLayout from './components/WelcomeLayout'
 import BackgroundLayout from './components/BackgroundLayout'
 import Navbar from './components/Navbar'
+import Marquee from './components/Marquee'
 import Footer from './components/Footer'
 import Home from './pages/Home'
 import HowItWorks from './pages/Workings'
@@ -27,7 +28,9 @@ function App() {
     <BackgroundLayout>
     <SmoothScroll>
         <div className="relative z-10 flex min-h-screen flex-col">
+
           <Navbar />
+          <Marquee />
 
           <main className="flex-1">
             <Routes>
@@ -47,7 +50,6 @@ function App() {
               <Route path="/terms" element={<TermsAndConditions />} />
             </Routes>
           </main>
-
           <Footer />
       </div>
       </SmoothScroll>

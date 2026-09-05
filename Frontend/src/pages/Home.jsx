@@ -60,7 +60,7 @@ function Home() {
   return (
     <div className="relative min-h-screen overflow-hidden">
       <WelcomeLayout />
-      <div className="relative z-10">
+      <div className="relative z-14">
 
         <main>
           <section className="mx-auto flex min-h-screen max-w-300 items-center px-5 pb-20 pt-32 sm:px-6 lg:px-8">

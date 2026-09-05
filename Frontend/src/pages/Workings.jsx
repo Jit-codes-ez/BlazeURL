@@ -81,7 +81,7 @@ function Connector({ label }) {
   return (
     <div className="flex flex-col items-center sm:mx-4 sm:min-w-24">
       <div className="relative hidden h-px w-full items-center sm:flex">
-        <span className="h-px w-full bg-gradient-to-r from-transparent via-(--accent)/50 to-transparent" />
+        <span className="h-px w-full bg-linear-to-r from-transparent via-(--accent)/50 to-transparent" />
 
         <ArrowRight
           size={14}
@@ -210,7 +210,7 @@ export default function HowItWorks() {
 
         <div className="relative mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {/* Connecting line behind cards */}
-          <div className="pointer-events-none absolute left-0 right-0 top-10 hidden h-px bg-gradient-to-r from-transparent via-(--accent)/30 to-transparent lg:block" />
+          <div className="pointer-events-none absolute left-0 right-0 top-10 hidden h-px bg-linear-to-r from-transparent via-(--accent)/30 to-transparent lg:block" />
 
           {STEPS.map((s) => (
             <GlassCard
