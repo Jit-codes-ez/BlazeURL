@@ -78,7 +78,7 @@ function Navbar() {
           </a>
 
           <div className="hidden items-center gap-7 md:flex">
-            <a href="#" className={navLinkClass}>
+            <a href="/workings" className={navLinkClass}>
               How It Works
             </a>
 

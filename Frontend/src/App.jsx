@@ -6,6 +6,7 @@ import BackgroundLayout from './components/BackgroundLayout'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import Home from './pages/Home'
+import HowItWorks from './pages/Workings'
 import GoogleAuth from './pages/GoogleAuth'
 
 import Dashboard from './pages/Dashboard'
@@ -31,6 +32,7 @@ function App() {
           <main className="flex-1">
             <Routes>
               <Route path="/" element={<Home />} />
+              <Route path="/workings" element={<HowItWorks />} />
               <Route path="/auth" element={<GoogleAuth />} />
               <Route path="/dashboard" element={<Dashboard />} />
               
