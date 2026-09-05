@@ -88,7 +88,7 @@ function GoogleAuth() {
     const { error: authError } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: 'https://blazeurl.vercel.app/auth/callback',
+        redirectTo: 'https://blazeurl.vercel.app/auth',
       },
     })
 
