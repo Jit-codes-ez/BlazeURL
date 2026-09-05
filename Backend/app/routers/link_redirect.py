@@ -24,6 +24,12 @@ def redirect_short_url(
     cached_user_url = get_user_url(short_code)
 
     if cached_user_url:
+        # Increment click count in DB even on cache hit
+        db.query(UserURL).filter(UserURL.short_code == short_code).update(
+            {"click_count": UserURL.click_count + 1}
+        )
+        db.commit()
+
         return RedirectResponse(
             url=cached_user_url,
             status_code=307,
@@ -46,6 +52,10 @@ def redirect_short_url(
     )
 
     if user_url:
+        # Increment click count
+        user_url.click_count += 1
+        db.commit()
+
         # Put it back into Redis
         store_user_url(
             short_code=user_url.short_code,
