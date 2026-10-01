@@ -13,6 +13,10 @@ jobs:
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
       REDIS_URL: ${{ secrets.REDIS_URL }}
       SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      FRONTEND_BASE_URL: "https://blazeurl.vercel.app"
+      BACKEND_BASE_URL: "http://localhost:8000"
+      TEMP_URL_EXPIRY_HOURS: "48"
 
     steps:
       - name: Checkout repository
