@@ -25,4 +25,4 @@ jobs:
         run: pip install -r Backend/Requirements.txt
 
       - name: Run cleanup
-        run: PYTHONPATH=Backend python cleanup.py
+        run: PYTHONPATH=Backend python Backend/cleanup.py
